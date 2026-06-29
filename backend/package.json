@@ -7,9 +7,13 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "better-sqlite3": "^9.6.0",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
-    "express": "^4.22.2"
+    "dotenv": "^17.4.2",
+    "express": "^4.22.2",
+    "express-validator": "^7.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.7.3"
   },
   "keywords": [],
   "author": "",
