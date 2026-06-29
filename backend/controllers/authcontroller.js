@@ -1,63 +1,97 @@
 // This file handles login and register logic
-// Think of it like a security guard checking your ID
+// Passwords are encrypted using bcrypt
+// JWT token is created after successful login
 
-const db = require('../models/db');
+const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator');
 
 // REGISTER - Create a new user account
-const register = (req, res) => {
+const register = async (req, res) => {
 
-  // Get username, password and role from the request
-  const { username, password, role } = req.body;
-
-  // Check if all fields are filled
-  if (!username || !password || !role) {
-    return res.status(400).json({ message: 'Please fill all fields!' });
+  // Check if all inputs are valid
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ message: errors.array()[0].msg });
   }
 
-  try {
-    // Save new user to database
-    db.prepare(
-      'INSERT INTO users (username, password, role) VALUES (?, ?, ?)'
-    ).run(username, password, role);
+  const { username, password, role } = req.body;
 
-    res.json({ message: 'Account created successfully!' });
+  try {
+    // Check if username already exists in database
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Username already exists!' });
+    }
+
+    // Encrypt the password before saving
+    // The number 10 means how strong the encryption is
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Create new user with encrypted password
+    const newUser = new User({
+      username,
+      password: hashedPassword,
+      role
+    });
+
+    // Save user to MongoDB
+    await newUser.save();
+
+    res.status(201).json({ message: 'Account created successfully!' });
 
   } catch (error) {
-    // This runs if username already exists
-    res.status(400).json({ message: 'Username already exists!' });
+    res.status(500).json({ message: 'Server error. Please try again!' });
   }
 
 };
 
-// LOGIN - Check if user exists
-const login = (req, res) => {
+// LOGIN - Check if user exists and password is correct
+const login = async (req, res) => {
 
-  // Get username and password from the request
-  const { username, password } = req.body;
-
-  // Check if both fields are filled
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Please enter username and password!' });
+  // Check if all inputs are valid
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ message: errors.array()[0].msg });
   }
 
-  // Look for user in database
-  const user = db.prepare(
-    'SELECT * FROM users WHERE username = ? AND password = ?'
-  ).get(username, password);
+  const { username, password } = req.body;
 
-  // If user found - login successful
-  if (user) {
+  try {
+    // Find user in MongoDB database
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid username or password!' });
+    }
+
+    // Compare entered password with encrypted password in database
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid username or password!' });
+    }
+
+    // Create JWT token - like a temporary ID card
+    const token = jwt.sign(
+      { id: user._id, username: user.username, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    // Send token and user details back to frontend
     res.json({
       message: 'Login successful!',
+      token,
       user: {
-        id: user.id,
+        id: user._id,
         username: user.username,
         role: user.role
       }
     });
-  } else {
-    // If user not found - wrong username or password
-    res.status(401).json({ message: 'Wrong username or password!' });
+
+  } catch (error) {
+    res.status(500).json({ message: 'Server error. Please try again!' });
   }
 
 };
