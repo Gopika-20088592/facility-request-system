@@ -1,10 +1,11 @@
-// This file sets up the URLs for all request actions
-// Think of it like a menu that lists all available actions
+// This file sets up all the URLs for facility requests
+// It also protects routes using our auth middleware
 
 const express = require('express');
 const router = express.Router();
+const { body } = require('express-validator');
 
-// Import all functions from request controller
+// Import controller functions
 const {
   getAllRequests,
   getMyRequests,
@@ -13,20 +14,38 @@ const {
   deleteRequest
 } = require('../controllers/requestController');
 
-// When someone goes to /requests - get all requests
-router.get('/requests', getAllRequests);
+// Import middleware for protection
+const { 
+  protect, 
+  adminOnly, 
+  staffOnly 
+} = require('../middleware/authMiddleware');
 
-// When someone goes to /requests/my/username - get only their requests
-router.get('/requests/my/:username', getMyRequests);
+// GET - Admin gets all requests (protected - admin only)
+router.get('/requests', protect, adminOnly, getAllRequests);
 
-// When someone submits a new request - create it
-router.post('/requests', createRequest);
+// GET - User gets their own requests (protected)
+router.get('/requests/my/:username', protect, getMyRequests);
 
-// When someone updates a request status - update it
-router.put('/requests/:id', updateRequest);
+// POST - Staff creates new request (protected - staff only)
+router.post('/requests', protect, staffOnly, [
+  // Check title is not empty
+  body('title')
+    .notEmpty()
+    .withMessage('Title is required'),
 
-// When someone deletes a request - delete it
-router.delete('/requests/:id', deleteRequest);
+  // Check description is not empty
+  body('description')
+    .notEmpty()
+    .withMessage('Description is required')
+
+], createRequest);
+
+// PUT - Update request status (protected - staff and admin)
+router.put('/requests/:id', protect, staffOnly, updateRequest);
+
+// DELETE - Delete request (protected - admin only)
+router.delete('/requests/:id', protect, adminOnly, deleteRequest);
 
 // Share these routes with server.js
 module.exports = router;
