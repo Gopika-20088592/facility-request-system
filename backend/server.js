@@ -4,6 +4,8 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
 const connectDB = require('./config/db');
 
 // Load environment variables from .env file
@@ -15,11 +17,17 @@ connectDB();
 // Create express app
 const app = express();
 
+// Add security headers - protects against XSS and other attacks
+app.use(helmet());
+
 // Allow React frontend to talk to this backend
 app.use(cors());
 
 // Allow server to understand JSON data
 app.use(express.json());
+
+// Prevent malicious database queries
+app.use(mongoSanitize());
 
 // Import and use our routes
 const authRoutes = require('./routes/authRoutes');
@@ -30,7 +38,7 @@ app.use('/api', requestRoutes);
 
 // Simple home route to check server is running
 app.get('/', (req, res) => {
-  res.json({ message: 'facility Request System API is running!' });
+  res.json({ message: 'Facility Request System API is running!' });
 });
 
 // Start server on port from .env file
