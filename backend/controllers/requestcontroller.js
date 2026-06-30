@@ -1,76 +1,92 @@
-// This file handles all request related logic
-// Create, View, Update and Delete requests
+// This file handles all facility request actions
+// Create, Read, Update and Delete requests using MongoDB
 
-const db = require('../models/db');
+const Request = require('../models/Request');
+const { validationResult } = require('express-validator');
 
-// GET - Get all requests from database
-const getAllRequests = (req, res) => {
-  // Fetch all requests that are not deleted
-  const requests = db.prepare(
-    'SELECT * FROM requests WHERE status != "Deleted"'
-  ).all();
-
-  res.json(requests);
+// GET - Get all requests (Admin only)
+const getAllRequests = async (req, res) => {
+  try {
+    // Find all requests that are not deleted
+    const requests = await Request.find()
+      .sort({ createdAt: -1 });
+    res.json(requests);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error. Please try again!' });
+  }
 };
 
-// GET - Get requests by a specific user
-const getMyRequests = (req, res) => {
-  // Get username from the URL
-  const { username } = req.params;
-
-  // Fetch only this user's requests
-  const requests = db.prepare(
-    'SELECT * FROM requests WHERE created_by = ? AND status != "Deleted"'
-  ).all(username);
-
-  res.json(requests);
+// GET - Get requests by specific user
+const getMyRequests = async (req, res) => {
+  try {
+    // Find only this user's requests
+    const requests = await Request.find({
+      created_by: req.params.username
+    }).sort({ createdAt: -1 });
+    res.json(requests);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error. Please try again!' });
+  }
 };
 
 // POST - Create a new request
-const createRequest = (req, res) => {
-  // Get title, description and username from the form
-  const { title, description, created_by } = req.body;
+const createRequest = async (req, res) => {
 
-  // Check if all fields are filled
-  if (!title || !description || !created_by) {
-    return res.status(400).json({ message: 'Please fill all fields!' });
+  // Check if all inputs are valid
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ message: errors.array()[0].msg });
   }
 
-  // Save request to database
-  db.prepare(
-    'INSERT INTO requests (title, description, created_by) VALUES (?, ?, ?)'
-  ).run(title, description, created_by);
+  const { title, description, created_by, created_by_role } = req.body;
 
-  res.json({ message: 'Request created successfully!' });
+  try {
+    // Create new request in MongoDB
+    const newRequest = new Request({
+      title,
+      description,
+      created_by,
+      created_by_role
+    });
+
+    // Save request to database
+    await newRequest.save();
+    res.status(201).json({ message: 'Request created successfully!' });
+
+  } catch (error) {
+    res.status(500).json({ message: 'Server error. Please try again!' });
+  }
 };
 
 // PUT - Update request status
-const updateRequest = (req, res) => {
-  // Get the new status from the request
-  const { status } = req.body;
+const updateRequest = async (req, res) => {
+  try {
+    const { status } = req.body;
 
-  // Get request id from the URL
-  const { id } = req.params;
+    // Find request by ID and update status
+    await Request.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
 
-  // Update the status in database
-  db.prepare(
-    'UPDATE requests SET status = ? WHERE id = ?'
-  ).run(status, id);
+    res.json({ message: 'Request updated successfully!' });
 
-  res.json({ message: 'Request updated successfully!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error. Please try again!' });
+  }
 };
 
-// DELETE - Delete a request
-const deleteRequest = (req, res) => {
-  // Get request id from the URL
-  const { id } = req.params;
+// DELETE - Delete a request (Admin only)
+const deleteRequest = async (req, res) => {
+  try {
+    // Find request by ID and delete it
+    await Request.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Request deleted successfully!' });
 
-  // Soft delete - just change status to Deleted
-  db.prepare(
-    'UPDATE requests SET status = "Deleted" WHERE id = ?'
-  ).run(id);
-
-  res.json({ message: 'Request deleted successfully!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error. Please try again!' });
+  }
 };
 
 // Share these functions with other files
