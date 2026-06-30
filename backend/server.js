@@ -1,30 +1,40 @@
 // This is the main file that starts our backend server
-// It brings together all routes and connects everything
+// It connects to MongoDB and loads all our routes
 
 const express = require('express');
 const cors = require('cors');
+const dotenv = require('dotenv');
+const connectDB = require('./config/db');
 
-// Import our routes
-const authRoutes = require('./routes/authRoutes');
-const requestRoutes = require('./routes/requestRoutes');
+// Load environment variables from .env file
+dotenv.config();
 
-// Import database so tables get created when server starts
-const db = require('./models/db');
+// Connect to MongoDB database
+connectDB();
 
-// Create our express app
+// Create express app
 const app = express();
 
 // Allow React frontend to talk to this backend
 app.use(cors());
 
-// Allow the server to understand JSON data
+// Allow server to understand JSON data
 app.use(express.json());
 
-// Use our routes
-app.use(authRoutes);
-app.use(requestRoutes);
+// Import and use our routes
+const authRoutes = require('./routes/authRoutes');
+const requestRoutes = require('./routes/requestRoutes');
 
-// Start the server on port 5000
-app.listen(5000, () => {
-  console.log('Backend server is running on http://localhost:5000');
+app.use('/api', authRoutes);
+app.use('/api', requestRoutes);
+
+// Simple home route to check server is running
+app.get('/', (req, res) => {
+  res.json({ message: 'facility Request System API is running!' });
+});
+
+// Start server on port from .env file
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
