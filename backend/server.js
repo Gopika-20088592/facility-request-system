@@ -38,7 +38,7 @@ app.use('/api', requestRoutes);
 
 // Simple home route to check server is running
 app.get('/', (req, res) => {
-  res.json({ message: 'Facility Request System API is running!' });
+  res.json({ message: 'Facility Request System API is running successfully!' });
 });
 
 // Start server on port from .env file
