@@ -132,6 +132,7 @@ function StaffDashboard() {
 
   // Show different colors for different statuses
   const getStatusColor = (status) => {
+    if (status === "New") return "#8e44ad";
     if (status === "Pending") return "#e67e22";
     if (status === "In Progress") return "#3498db";
     if (status === "Resolved") return "#27ae60";
@@ -300,6 +301,7 @@ function StaffDashboard() {
                   onChange={(e) => handleUpdateStatus(request._id, e.target.value)}
                   style={{ padding: "5px", borderRadius: "5px" }}
                 >
+                  <option value="New">New</option>
                   <option value="Pending">Pending</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Resolved">Resolved</option>
