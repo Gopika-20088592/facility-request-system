@@ -68,15 +68,21 @@ const createRequest = async (req, res) => {
   }
 };
 
-// PUT - Update request status
 const updateRequest = async (req, res) => {
   try {
-    const { status } = req.body;
+    const { status, reason } = req.body;
 
-    // Find request by ID and update status
+    // Check if reason is provided
+    if (!reason || reason.trim() === '') {
+      return res.status(400).json({ 
+        message: 'Please provide a reason for the status change!' 
+      });
+    }
+
+    // Update both status and reason in database
     await Request.findByIdAndUpdate(
       req.params.id,
-      { status },
+      { status, reason },
       { new: true }
     );
 
