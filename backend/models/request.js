@@ -26,6 +26,11 @@ const RequestSchema = new mongoose.Schema({
     default: 'New'
   },
 
+  reason: {
+    type: String,
+    default: ''
+  },
+
   // Who created this request
   created_by: {
     type: String,
