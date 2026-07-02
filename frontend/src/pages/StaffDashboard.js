@@ -109,22 +109,32 @@ function StaffDashboard() {
       setError("Could not submit request. Please try again!");
     }
   };
-
-  // Update the status of a request
+  
   const handleUpdateStatus = async (id, newStatus) => {
+    
+    const reason = window.prompt(
+      `You are changing status to "${newStatus}". \n\nPlease enter a reason for this change:`
+    );
+    
+    if (!reason || reason.trim() === "") {
+      alert("Please provide a reason before updating the status!");
+      return;
+    }
+    
     try {
+      
       await fetch(`http://localhost:5000/api/requests/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ status: newStatus })
+        
+        body: JSON.stringify({ status: newStatus, reason: reason })
       });
-
-      // Refresh the list after update
+      
       fetchAllRequests();
-
+    
     } catch (err) {
       setError("Could not update request. Please try again!");
     }
