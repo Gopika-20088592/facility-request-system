@@ -22,8 +22,8 @@ const RequestSchema = new mongoose.Schema({
   // Current status of the request
   status: {
     type: String,
-    enum: ['Pending', 'In Progress', 'Resolved'],
-    default: 'Pending'
+    enum: ['New', 'In Progress', 'Pending', 'Resolved'],
+    default: 'New'
   },
 
   // Who created this request
