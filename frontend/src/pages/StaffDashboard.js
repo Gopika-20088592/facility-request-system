@@ -17,6 +17,7 @@ function StaffDashboard() {
   // Store new request form details
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [raisedFor, setRaisedFor] = useState("");
 
   // Store weather information
   const [weather, setWeather] = useState(null);
@@ -83,7 +84,8 @@ function StaffDashboard() {
           title,
           description,
           created_by: user.username,
-          created_by_role: user.role
+          created_by_role: user.role,
+          raised_for: raisedFor
         })
       });
 
@@ -97,6 +99,7 @@ function StaffDashboard() {
       // Clear the form
       setTitle("");
       setDescription("");
+      setRaisedFor("");
       setSuccess("Request submitted successfully!");
 
       // Refresh the requests list
@@ -190,6 +193,16 @@ function StaffDashboard() {
           <h3 style={{ margin: "0 0 15px" }}>Submit New Facility Request</h3>
 
           <form onSubmit={handleCreateRequest}>
+
+          <label>Raised For (Employee Username)</label><br />
+          <input
+           type="text"
+           value={raisedFor}
+           onChange={(e) => setRaisedFor(e.target.value)}
+           placeholder="Enter the username of the employee this request is for"
+           style={{ width: "100%", padding: "8px", marginBottom: "10px", boxSizing: "border-box" }}
+          />
+          <br />
 
             <label>Request Title</label><br />
             <input
