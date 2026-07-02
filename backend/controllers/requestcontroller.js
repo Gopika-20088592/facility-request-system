@@ -16,13 +16,19 @@ const getAllRequests = async (req, res) => {
   }
 };
 
-// GET - Get requests by specific user
 const getMyRequests = async (req, res) => {
   try {
-    // Find only this user's requests
+    const { username } = req.params;
+
+    // Find requests where user is the creator
+    // OR where the request was raised for them by staff
     const requests = await Request.find({
-      created_by: req.params.username
+      $or: [
+        { created_by: username },
+        { raised_for: username }
+      ]
     }).sort({ createdAt: -1 });
+
     res.json(requests);
   } catch (error) {
     res.status(500).json({ message: 'Server error. Please try again!' });
