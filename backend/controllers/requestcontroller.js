@@ -44,15 +44,19 @@ const createRequest = async (req, res) => {
     return res.status(400).json({ message: errors.array()[0].msg });
   }
 
-  const { title, description, created_by, created_by_role } = req.body;
+  // Now also getting raised_for from the request body
+  const { title, description, created_by, created_by_role, raised_for } = req.body;
 
   try {
     // Create new request in MongoDB
+    // Status starts as New when first created
     const newRequest = new Request({
       title,
       description,
       created_by,
-      created_by_role
+      created_by_role,
+      raised_for: raised_for || '',
+      status: 'New'
     });
 
     // Save request to database
