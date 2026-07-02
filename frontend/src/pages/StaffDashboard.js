@@ -143,8 +143,8 @@ function StaffDashboard() {
   // Show different colors for different statuses
   const getStatusColor = (status) => {
     if (status === "New") return "#8e44ad";
-    if (status === "Pending") return "#e67e22";
     if (status === "In Progress") return "#3498db";
+    if (status === "Pending") return "#e67e22";
     if (status === "Resolved") return "#27ae60";
     return "#95a5a6";
   };
@@ -285,12 +285,28 @@ function StaffDashboard() {
             }}>
 
               <div>
+                
                 <h4 style={{ margin: "0 0 5px" }}>{request.title}</h4>
                 <p style={{ margin: "0 0 5px", color: "#666" }}>{request.description}</p>
-                <p style={{ margin: 0, fontSize: "13px", color: "#999" }}>
-                  Submitted: {new Date(request.createdAt).toLocaleDateString()}
-                </p>
-              </div>
+                
+                {/* Show who this request was raised for */}
+                {request.raised_for && (
+                  <p style={{ margin: "0 0 5px", fontSize: "13px", color: "#2c3e50" }}>
+                    👤 Raised for: <strong>{request.raised_for}</strong>
+                    </p>
+                  )}
+                  
+                  {/* Show reason for current status */}
+                  {request.reason && (
+                    <p style={{ margin: "0 0 5px", fontSize: "13px", color: "#8e44ad" }}>
+                      💬 Reason: <strong>{request.reason}</strong>
+                      </p>
+                    )}
+                    
+                    <p style={{ margin: 0, fontSize: "13px", color: "#999" }}>
+                      Submitted: {new Date(request.createdAt).toLocaleDateString()}
+                      </p>
+                      </div>
 
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
 
@@ -312,8 +328,8 @@ function StaffDashboard() {
                   style={{ padding: "5px", borderRadius: "5px" }}
                 >
                   <option value="New">New</option>
-                  <option value="Pending">Pending</option>
                   <option value="In Progress">In Progress</option>
+                  <option value="Pending">Pending</option>
                   <option value="Resolved">Resolved</option>
                 </select>
 
