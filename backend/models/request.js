@@ -43,6 +43,11 @@ const RequestSchema = new mongoose.Schema({
     required: true
   },
 
+  raised_for: {
+    type: String,
+    default: ''
+  },
+
   // Date when request was created
   createdAt: {
     type: Date,
