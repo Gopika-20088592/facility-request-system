@@ -1,27 +1,22 @@
-// This is the Register page
-// New users create an account by choosing username, password and role
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
   const navigate = useNavigate();
 
-  // Store what the user types in the form
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // This runs when user clicks the Register button
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
     try {
-      // Send the details to our backend API
+
       const response = await fetch("http://localhost:5000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -30,16 +25,13 @@ function Register() {
 
       const data = await response.json();
 
-      // If registration failed show error
       if (!response.ok) {
         setError(data.message);
         return;
       }
 
-      // Show success message
       setSuccess("Account created successfully! Redirecting to login...");
 
-      // Wait 1.5 seconds then go to login page
       setTimeout(() => {
         navigate("/");
       }, 1500);
@@ -92,10 +84,9 @@ function Register() {
         </select>
         <br />
 
-        {/* Show error message if something went wrong */}
+
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        {/* Show success message if registration worked */}
         {success && <p style={{ color: "green" }}>{success}</p>}
 
         <button

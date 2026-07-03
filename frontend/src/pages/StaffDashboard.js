@@ -1,42 +1,30 @@
-// This is the Staff Dashboard page
-// Staff can create new facility requests and update status of existing ones
-// Also shows current weather using OpenWeatherMap API
-// Weather helps staff decide if outdoor maintenance work can be carried out
-
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 
 function StaffDashboard() {
 
-  // Store all requests
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Store new request form details
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [raisedFor, setRaisedFor] = useState("");
 
-  // Store weather information
   const [weather, setWeather] = useState(null);
   const [weatherLoading, setWeatherLoading] = useState(true);
 
-  // Get logged in user details
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("token");
 
-  // Weather API key from OpenWeatherMap
   const WEATHER_API_KEY = "fca7c0700fb424218de10021a6f278f8";
 
-  // This runs when the page loads
   useEffect(() => {
     fetchAllRequests();
     fetchWeather();
   }, []);
 
-  // Get current weather for Dublin Ireland
   const fetchWeather = async () => {
     try {
       const response = await fetch(
@@ -50,7 +38,6 @@ function StaffDashboard() {
     }
   };
 
-  // Get all requests from backend
   const fetchAllRequests = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/requests/my/" + user.username, {
@@ -67,7 +54,6 @@ function StaffDashboard() {
     }
   };
 
-  // Create a new facility request
   const handleCreateRequest = async (e) => {
     e.preventDefault();
     setError("");
@@ -96,13 +82,11 @@ function StaffDashboard() {
         return;
       }
 
-      // Clear the form
       setTitle("");
       setDescription("");
       setRaisedFor("");
       setSuccess("Request submitted successfully!");
 
-      // Refresh the requests list
       fetchAllRequests();
 
     } catch (err) {
@@ -140,7 +124,6 @@ function StaffDashboard() {
     }
   };
 
-  // Show different colors for different statuses
   const getStatusColor = (status) => {
     if (status === "New") return "#8e44ad";
     if (status === "In Progress") return "#3498db";
@@ -152,14 +135,12 @@ function StaffDashboard() {
   return (
     <div style={{ fontFamily: "Arial", minHeight: "100vh", backgroundColor: "#f5f6fa" }}>
 
-      {/* Navbar at top */}
       <Navbar />
 
       <div style={{ padding: "30px", maxWidth: "900px", margin: "0 auto" }}>
 
         <h2>Staff Dashboard</h2>
 
-        {/* Weather Widget - Shows current weather to help plan outdoor maintenance */}
         <div style={{
           backgroundColor: "#2c3e50",
           color: "white",
@@ -193,7 +174,6 @@ function StaffDashboard() {
           )}
         </div>
 
-        {/* Create New Request Form */}
         <div style={{
           backgroundColor: "white",
           padding: "25px",
@@ -256,7 +236,6 @@ function StaffDashboard() {
           </form>
         </div>
 
-        {/* List of Requests */}
         <h3>My Submitted Requests</h3>
 
         {loading && <p>Loading requests...</p>}
@@ -289,14 +268,12 @@ function StaffDashboard() {
                 <h4 style={{ margin: "0 0 5px" }}>{request.title}</h4>
                 <p style={{ margin: "0 0 5px", color: "#666" }}>{request.description}</p>
                 
-                {/* Show who this request was raised for */}
                 {request.raised_for && (
                   <p style={{ margin: "0 0 5px", fontSize: "13px", color: "#2c3e50" }}>
                     👤 Raised for: <strong>{request.raised_for}</strong>
                     </p>
                   )}
                   
-                  {/* Show reason for current status */}
                   {request.reason && (
                     <p style={{ margin: "0 0 5px", fontSize: "13px", color: "#8e44ad" }}>
                       💬 Reason: <strong>{request.reason}</strong>
@@ -310,7 +287,6 @@ function StaffDashboard() {
 
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
 
-                {/* Status badge */}
                 <span style={{
                   backgroundColor: getStatusColor(request.status),
                   color: "white",
@@ -321,7 +297,6 @@ function StaffDashboard() {
                   {request.status}
                 </span>
 
-                {/* Update status dropdown */}
                 <select
                   value={request.status}
                   onChange={(e) => handleUpdateStatus(request._id, e.target.value)}

@@ -1,24 +1,19 @@
-// This is the Login page
-// User enters username and password, we check it with the backend
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
   const navigate = useNavigate();
 
-  // Store what the user types
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // This runs when user clicks the Login button
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      // Send username and password to backend
+
       const response = await fetch("http://localhost:5000/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,17 +22,14 @@ function Login() {
 
       const data = await response.json();
 
-      // If login failed, show the error message
       if (!response.ok) {
         setError(data.message);
         return;
       }
 
-      // Save the login token and user info so we stay logged in
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      // Send user to the correct dashboard based on their role
       if (data.user.role === "admin") {
         navigate("/admin");
       } else if (data.user.role === "staff") {
