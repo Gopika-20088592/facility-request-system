@@ -1,26 +1,18 @@
-// This is the Admin Dashboard page
-// Admin can see all requests, update status and delete requests
-// Admin also sees a summary of total pending and resolved requests
-
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 
 function AdminDashboard() {
 
-  // Store all requests
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Get logged in user details
   const token = localStorage.getItem("token");
 
-  // This runs when the page loads
   useEffect(() => {
     fetchAllRequests();
   }, []);
 
-  // Get ALL requests from backend
   const fetchAllRequests = async () => {
     try {
       const response = await fetch("http://localhost:5000/api/requests", {
@@ -46,7 +38,6 @@ function AdminDashboard() {
     }
   };
 
-  // Update the status of any request
   const handleUpdateStatus = async (id, newStatus) => {
     try {
       await fetch(`http://localhost:5000/api/requests/${id}`, {
@@ -58,20 +49,26 @@ function AdminDashboard() {
         body: JSON.stringify({ status: newStatus })
       });
 
-      // Refresh the list after update
       fetchAllRequests();
 
     } catch (err) {
       setError("Could not update request!");
     }
   };
-
-  // Delete a request permanently
+  
   const handleDelete = async (id) => {
-
-    // Ask admin to confirm before deleting
+    
+    const reason = window.prompt(
+      "Please enter the reason for deleting this request:"
+    );
+    
+    if (!reason || reason.trim() === "") {
+      alert("Please provide a reason before deleting!");
+      return;
+    }
+    
     const confirmed = window.confirm(
-      "Are you sure you want to delete this request? This cannot be undone!"
+      `Are you sure you want to delete this request?\n\nReason: ${reason}\n\nThis cannot be undone!`
     );
 
     if (!confirmed) return;
@@ -84,7 +81,6 @@ function AdminDashboard() {
         }
       });
 
-      // Refresh the list after delete
       fetchAllRequests();
 
     } catch (err) {
@@ -92,7 +88,6 @@ function AdminDashboard() {
     }
   };
 
-  // Show different colors for different statuses
   const getStatusColor = (status) => {
     if (status === "Pending") return "#e67e22";
     if (status === "In Progress") return "#3498db";
@@ -100,7 +95,6 @@ function AdminDashboard() {
     return "#95a5a6";
   };
 
-  // Count requests by status for the summary cards
   const totalRequests = requests.length;
   const pendingRequests = requests.filter(r => r.status === "Pending").length;
   const inProgressRequests = requests.filter(r => r.status === "In Progress").length;
@@ -113,7 +107,6 @@ function AdminDashboard() {
       backgroundColor: "#f5f6fa"
     }}>
 
-      {/* Navbar at top */}
       <Navbar />
 
       <div style={{ padding: "30px", maxWidth: "1000px", margin: "0 auto" }}>
@@ -123,7 +116,6 @@ function AdminDashboard() {
           Manage all facility requests from all users and staff
         </p>
 
-        {/* Summary Cards */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
@@ -131,7 +123,6 @@ function AdminDashboard() {
           marginBottom: "30px"
         }}>
 
-          {/* Total Requests Card */}
           <div style={{
             backgroundColor: "#2c3e50",
             color: "white",
@@ -145,7 +136,6 @@ function AdminDashboard() {
             </p>
           </div>
 
-          {/* Pending Card */}
           <div style={{
             backgroundColor: "#e67e22",
             color: "white",
@@ -159,7 +149,6 @@ function AdminDashboard() {
             </p>
           </div>
 
-          {/* In Progress Card */}
           <div style={{
             backgroundColor: "#3498db",
             color: "white",
@@ -173,7 +162,6 @@ function AdminDashboard() {
             </p>
           </div>
 
-          {/* Resolved Card */}
           <div style={{
             backgroundColor: "#27ae60",
             color: "white",
@@ -189,7 +177,6 @@ function AdminDashboard() {
 
         </div>
 
-        {/* All Requests List */}
         <h3>All Facility Requests</h3>
 
         {loading && <p>Loading all requests...</p>}
@@ -239,7 +226,6 @@ function AdminDashboard() {
                 flexWrap: "wrap"
               }}>
 
-                {/* Status badge */}
                 <span style={{
                   backgroundColor: getStatusColor(request.status),
                   color: "white",
@@ -250,7 +236,6 @@ function AdminDashboard() {
                   {request.status}
                 </span>
 
-                {/* Update status dropdown */}
                 <select
                   value={request.status}
                   onChange={(e) => handleUpdateStatus(request._id, e.target.value)}
@@ -261,7 +246,6 @@ function AdminDashboard() {
                   <option value="Resolved">Resolved</option>
                 </select>
 
-                {/* Delete button */}
                 <button
                   onClick={() => handleDelete(request._id)}
                   style={{
