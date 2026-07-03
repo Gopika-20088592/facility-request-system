@@ -101,15 +101,30 @@ function UserDashboard() {
               alignItems: "center"
             }}>
 
-              <div>
-                <h3 style={{ margin: "0 0 8px" }}>{request.title}</h3>
-                <p style={{ margin: "0 0 8px", color: "#666" }}>
-                  {request.description}
+            <div>
+            <h3 style={{ margin: "0 0 8px" }}>{request.title}</h3>
+            <p style={{ margin: "0 0 8px", color: "#666" }}>
+            {request.description}
+            </p>
+            
+            {/* Show who raised this request */}
+            {request.raised_for && (
+            <p style={{ margin: "0 0 5px", fontSize: "13px", color: "#2c3e50" }}>
+              👤 Raised by staff on your behalf
+              </p>
+            )}
+            
+            {/* Show reason for current status - transparency for user */}
+            {request.reason && (
+              <p style={{ margin: "0 0 5px", fontSize: "13px", color: "#8e44ad" }}>
+                💬 Status Reason: <strong>{request.reason}</strong>
                 </p>
-                <p style={{ margin: 0, fontSize: "13px", color: "#999" }}>
-                  Submitted: {new Date(request.createdAt).toLocaleDateString()}
+              )}
+              
+              <p style={{ margin: 0, fontSize: "13px", color: "#999" }}>
+                Submitted: {new Date(request.createdAt).toLocaleDateString()}
                 </p>
-              </div>
+                </div>
 
               {/* Status badge */}
               <span style={{
