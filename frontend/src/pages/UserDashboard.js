@@ -97,7 +97,7 @@ function UserDashboard() {
             
             {request.raised_for && (
             <p style={{ margin: "0 0 5px", fontSize: "13px", color: "#2c3e50" }}>
-              👤 Raised by staff on your behalf
+              👤 Raised by facility staff on your behalf
               </p>
             )}
             

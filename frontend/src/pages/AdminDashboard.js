@@ -219,16 +219,27 @@ function AdminDashboard() {
 
               <div>
                 <h4 style={{ margin: "0 0 5px" }}>{request.title}</h4>
-                <p style={{ margin: "0 0 5px", color: "#666" }}>
-                  {request.description}
-                </p>
+                <p style={{ margin: "0 0 5px", color: "#666" }}>{request.description}</p>
                 <p style={{ margin: "0 0 3px", fontSize: "13px", color: "#999" }}>
                   Submitted by: <strong>{request.created_by}</strong> ({request.created_by_role})
-                </p>
-                <p style={{ margin: 0, fontSize: "13px", color: "#999" }}>
-                  Date: {new Date(request.createdAt).toLocaleDateString()}
-                </p>
-              </div>
+                  </p>
+                  
+                  {request.raised_for && (
+                    <p style={{ margin: "0 0 3px", fontSize: "13px", color: "#2c3e50" }}>
+                      👤 Raised for: <strong>{request.raised_for}</strong>
+                      </p>
+                    )}
+                    
+                    {request.reason && (
+                      <p style={{ margin: "0 0 3px", fontSize: "13px", color: "#8e44ad" }}>
+                        💬 Reason: <strong>{request.reason}</strong>
+                        </p>
+                      )}
+                      
+                      <p style={{ margin: 0, fontSize: "13px", color: "#999" }}>
+                        Date: {new Date(request.createdAt).toLocaleDateString()}
+                        </p>
+                        </div>
 
               <div style={{
                 display: "flex",
