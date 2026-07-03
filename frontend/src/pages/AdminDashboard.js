@@ -58,7 +58,7 @@ function AdminDashboard() {
         },
         body: JSON.stringify({ status: newStatus, reason: reason })
       });
-      
+
       fetchAllRequests();
 
     } catch (err) {
@@ -99,8 +99,9 @@ function AdminDashboard() {
   };
 
   const getStatusColor = (status) => {
-    if (status === "Pending") return "#e67e22";
+    if (status === "New") return "#8e44ad";
     if (status === "In Progress") return "#3498db";
+    if (status === "Pending") return "#e67e22";
     if (status === "Resolved") return "#27ae60";
     return "#95a5a6";
   };
