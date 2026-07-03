@@ -108,8 +108,9 @@ function AdminDashboard() {
   };
 
   const totalRequests = requests.length;
-  const pendingRequests = requests.filter(r => r.status === "Pending").length;
+  const newRequests = requests.filter(r => r.status === "New").length;
   const inProgressRequests = requests.filter(r => r.status === "In Progress").length;
+  const pendingRequests = requests.filter(r => r.status === "Pending").length;
   const resolvedRequests = requests.filter(r => r.status === "Resolved").length;
 
   return (
@@ -146,7 +147,7 @@ function AdminDashboard() {
 
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
+          gridTemplateColumns: "repeat(5, 1fr)",
           gap: "15px",
           marginBottom: "30px"
         }}>
@@ -163,6 +164,19 @@ function AdminDashboard() {
               {totalRequests}
             </p>
           </div>
+          
+          <div style={{
+            backgroundColor: "#8e44ad",
+            color: "white",
+            padding: "20px",
+            borderRadius: "8px",
+            textAlign: "center"
+            }}>
+              <p style={{ margin: "0 0 5px", fontSize: "13px" }}>New</p>
+              <p style={{ margin: 0, fontSize: "32px", fontWeight: "bold" }}>
+                {newRequests}
+                </p>
+                </div>
 
           <div style={{
             backgroundColor: "#e67e22",
@@ -287,8 +301,9 @@ function AdminDashboard() {
                   onChange={(e) => handleUpdateStatus(request._id, e.target.value)}
                   style={{ padding: "5px", borderRadius: "5px" }}
                 >
-                  <option value="Pending">Pending</option>
+                  <option value="New">New</option>
                   <option value="In Progress">In Progress</option>
+                  <option value="Pending">Pending</option>
                   <option value="Resolved">Resolved</option>
                 </select>
 
