@@ -6,6 +6,7 @@ function AdminDashboard() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const token = localStorage.getItem("token");
 
@@ -127,6 +128,22 @@ function AdminDashboard() {
           Manage all facility requests from all users and staff
         </p>
 
+        <input
+        type="text"
+        placeholder="Search by title, username or raised for..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{
+          width: "100%",
+          padding: "10px",
+          marginBottom: "20px",
+          borderRadius: "5px",
+          border: "1px solid #ddd",
+          fontSize: "14px",
+          boxSizing: "border-box"
+          }}
+          />
+
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
@@ -197,8 +214,15 @@ function AdminDashboard() {
         {!loading && requests.length === 0 && (
           <p style={{ color: "#666" }}>No requests found in the system!</p>
         )}
+        
+        {requests
+        .filter((request) =>
 
-        {requests.map((request) => (
+          request.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          request.created_by.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (request.raised_for && request.raised_for.toLowerCase().includes(searchTerm.toLowerCase()))
+        )
+        .map((request) => (
           <div
             key={request._id}
             style={{
