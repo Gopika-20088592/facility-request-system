@@ -37,8 +37,18 @@ function AdminDashboard() {
       setLoading(false);
     }
   };
-
+  
   const handleUpdateStatus = async (id, newStatus) => {
+    
+    const reason = window.prompt(
+      `You are changing status to "${newStatus}".\n\nPlease enter a reason for this change:`
+    );
+    
+    if (!reason || reason.trim() === "") {
+      alert("Please provide a reason before updating the status!");
+      return;
+    }
+    
     try {
       await fetch(`http://localhost:5000/api/requests/${id}`, {
         method: "PUT",
@@ -46,9 +56,9 @@ function AdminDashboard() {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: newStatus, reason: reason })
       });
-
+      
       fetchAllRequests();
 
     } catch (err) {
