@@ -51,8 +51,9 @@ function UserDashboard() {
 
   // Show different colors for different statuses
   const getStatusColor = (status) => {
-    if (status === "Pending") return "#e67e22";
+    if (status === "New") return "#8e44ad";
     if (status === "In Progress") return "#3498db";
+    if (status === "Pending") return "#e67e22";
     if (status === "Resolved") return "#27ae60";
     return "#95a5a6";
   };
