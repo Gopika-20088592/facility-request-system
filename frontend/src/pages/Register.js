@@ -42,68 +42,153 @@ function Register() {
   };
 
   return (
-    <div style={{
-      maxWidth: "350px",
-      margin: "80px auto",
-      fontFamily: "Arial"
-    }}>
-      <h2>Facility Request System</h2>
-      <h3>Create Account</h3>
+    <div style={{ minHeight: "100vh", display: "flex" }}>
 
-      <form onSubmit={handleRegister}>
+      <div style={{
+        flex: 1,
+        backgroundImage: "url('/facility.webp')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-end",
+        padding: "40px"
+      }}>
 
-        <label>Username</label><br />
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
-          required
-        />
-        <br />
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.65)"
+        }}/>
 
-        <label>Password (at least 6 characters)</label><br />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
-          required
-        />
-        <br />
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <h1 style={{
+            color: "white",
+            fontSize: "28px",
+            fontWeight: "500",
+            margin: "0 0 8px"
+          }}>
+            Facility Request System
+          </h1>
+          <p style={{
+            color: "rgba(255,255,255,0.8)",
+            fontSize: "15px",
+            margin: 0
+          }}>
+            Submit, track and resolve facility requests
+          </p>
+        </div>
+      </div>
 
-        <label>Select Your Role</label><br />
-        <select
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
-        >
-          <option value="user">User</option>
-          <option value="staff">Staff</option>
-          <option value="admin">Admin</option>
-        </select>
-        <br />
+      <div style={{
+        width: "420px",
+        backgroundColor: "white",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        padding: "50px 40px",
+        boxShadow: "-10px 0 30px rgba(0, 0, 0, 0.3)"
+      }}>
 
+        <p style={{
+          fontSize: "13px",
+          color: "#888",
+          letterSpacing: "1px",
+          margin: "0 0 8px"
+        }}>
+          🏢 CREATE ACCOUNT
+        </p>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
-        {success && <p style={{ color: "green" }}>{success}</p>}
-
-        <button
-          type="submit"
-          style={{ padding: "10px 20px" }}
-        >
+        <h2 style={{
+          fontSize: "26px",
+          color: "#2c3e50",
+          margin: "0 0 8px",
+          fontWeight: "500"
+        }}>
           Register
-        </button>
+        </h2>
 
-      </form>
+        <p style={{
+          fontSize: "14px",
+          color: "#888",
+          margin: "0 0 30px"
+        }}>
+          Fill in your details to create an account
+        </p>
 
-      <p>
-        Already have an account? <Link to="/">Login here</Link>
-      </p>
+        <form onSubmit={handleRegister}>
 
+          <div className="form-group">
+            <label>Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Choose a username"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Password (at least 6 characters)</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Choose a password"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Select Your Role</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="user">User</option>
+              <option value="staff">Staff</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+
+          {error && <p className="error-msg">{error}</p>}
+          {success && <p className="success-msg">{success}</p>}
+
+          <button
+            type="submit"
+            style={{
+              width: "100%",
+              padding: "12px",
+              backgroundColor: "#2c3e50",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              fontSize: "15px",
+              cursor: "pointer",
+              marginTop: "5px"
+            }}
+          >
+            Create Account
+          </button>
+
+        </form>
+
+        <p style={{
+          textAlign: "center",
+          fontSize: "14px",
+          color: "#888",
+          marginTop: "20px"
+        }}>
+          Already have an account?{" "}
+          <Link to="/" style={{ color: "#3498db" }}>
+            Login here
+          </Link>
+        </p>
+
+      </div>
     </div>
   );
 }
-
 export default Register;
