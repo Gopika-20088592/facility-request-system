@@ -61,7 +61,7 @@ return (
         <div style={{
           position: "absolute",
           inset: 0,
-          backgroundColor: "rgba(0, 0, 0, 0.4)"
+          backgroundColor: "rgba(0, 0, 0, 0.65)"
         }}/>
 
         <div style={{ position: "relative", zIndex: 1 }}>
@@ -89,7 +89,8 @@ return (
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: "50px 40px"
+        padding: "50px 40px",
+        boxShadow: "-10px 0 30px rgba(0, 0, 0, 0.3)"
       }}>
 
         <p style={{
