@@ -43,45 +43,139 @@ function Login() {
     }
   };
 
-  return (
-    <div style={{ maxWidth: "350px", margin: "80px auto", fontFamily: "Arial" }}>
-      <h2>Facility Request System</h2>
-      <h3>Login</h3>
+return (
+    <div style={{ minHeight: "100vh", display: "flex" }}>
 
-      <form onSubmit={handleLogin}>
+      <div style={{
+        flex: 1,
+        backgroundImage: "url('/facility.webp')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-end",
+        padding: "40px"
+      }}>
 
-        <label>Username</label><br />
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
-          required
-        />
-        <br />
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.4)"
+        }}/>
 
-        <label>Password</label><br />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
-          required
-        />
-        <br />
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <h1 style={{
+            color: "white",
+            fontSize: "28px",
+            fontWeight: "500",
+            margin: "0 0 8px"
+          }}>
+            Facility Request System
+          </h1>
+          <p style={{
+            color: "rgba(255,255,255,0.8)",
+            fontSize: "15px",
+            margin: 0
+          }}>
+            Submit, track and resolve facility requests
+          </p>
+        </div>
+      </div>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+      <div style={{
+        width: "420px",
+        backgroundColor: "white",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        padding: "50px 40px"
+      }}>
 
-        <button type="submit" style={{ padding: "10px 20px" }}>
-          Login
-        </button>
+        <p style={{
+          fontSize: "13px",
+          color: "#888",
+          letterSpacing: "1px",
+          margin: "0 0 8px"
+        }}>
+          🏢 WELCOME BACK
+        </p>
 
-      </form>
+        <h2 style={{
+          fontSize: "26px",
+          color: "#2c3e50",
+          margin: "0 0 8px",
+          fontWeight: "500"
+        }}>
+          Sign In
+        </h2>
 
-      <p>
-        Don't have an account? <Link to="/register">Register here</Link>
-      </p>
+        <p style={{
+          fontSize: "14px",
+          color: "#888",
+          margin: "0 0 30px"
+        }}>
+          Enter your credentials to access your dashboard
+        </p>
 
+        <form onSubmit={handleLogin}>
+
+          <div className="form-group">
+            <label>Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your username"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+
+          {error && <p className="error-msg">{error}</p>}
+
+          <button
+            type="submit"
+            style={{
+              width: "100%",
+              padding: "12px",
+              backgroundColor: "#2c3e50",
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              fontSize: "15px",
+              cursor: "pointer",
+              marginTop: "5px"
+            }}
+          >
+            Sign In
+          </button>
+
+        </form>
+
+        <p style={{
+          textAlign: "center",
+          fontSize: "14px",
+          color: "#888",
+          marginTop: "20px"
+        }}>
+          Don't have an account?{" "}
+          <Link to="/register" style={{ color: "#3498db" }}>
+            Register here
+          </Link>
+        </p>
+
+      </div>
     </div>
   );
 }
