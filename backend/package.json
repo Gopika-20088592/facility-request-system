@@ -4,7 +4,8 @@
   "description": "Facility Request Management System Backend",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "node server.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
