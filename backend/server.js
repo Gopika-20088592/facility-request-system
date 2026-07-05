@@ -9,7 +9,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const connectDB = require('./config/db');
 
 // Load environment variables from .env file
-dotenv.config();
+dotenv.config({path:'./.env'});
 
 // Connect to MongoDB database
 connectDB();
@@ -46,3 +46,5 @@ const PORT = process.env.PORT || 5000;
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }
+
+module.exports = app;
