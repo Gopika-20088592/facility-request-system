@@ -55,11 +55,11 @@ function UserDashboard() {
 
       <Navbar />
 
-      <div style={{ padding: "30px", maxWidth: "800px", margin: "0 auto" }}>
+      <div style={{ padding: "40px 30px", maxWidth: "700px", margin: "0 auto" }}>
 
-        <h2>My Facility Requests</h2>
-        <p style={{ color: "#666" }}>
-          Here you can see all the facility requests you have submitted
+        <h2 style={{ margin: "0 0 5px", color: "#2c3e50" }}>My Facility Requests</h2>
+        <p style={{ color: "#888", marginBottom: "25px", fontSize: "14px" }}>
+          Here you can see all the facility requests submitted or raised on your behalf
         </p>
 
         {loading && <p>Loading your requests...</p>}
@@ -74,15 +74,16 @@ function UserDashboard() {
 
         {requests.map((request) => (
           <div
-            key={request._id}
-            style={{
-              backgroundColor: "white",
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              padding: "20px",
-              marginBottom: "15px"
+          key={request._id}
+          style={{
+            backgroundColor: "white",
+            border: "0.5px solid #e0e0e0",
+            borderRadius: "0 8px 8px 0",
+            padding: "20px 25px",
+            marginBottom: "15px",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.05)"
             }}
-          >
+            >
             <div style={{
               display: "flex",
               justifyContent: "space-between",
