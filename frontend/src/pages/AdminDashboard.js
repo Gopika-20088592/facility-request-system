@@ -16,7 +16,7 @@ function AdminDashboard() {
 
   const fetchAllRequests = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/requests", {
+      const response = await fetch("https://facility-request-system.vercel.app/api/requests", {
         headers: {
           // Send login token so backend knows we are admin
           "Authorization": `Bearer ${token}`
@@ -51,7 +51,7 @@ function AdminDashboard() {
     }
     
     try {
-      await fetch(`http://localhost:5000/api/requests/${id}`, {
+      await fetch(`https://facility-request-system.vercel.app/api/requests/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +85,7 @@ function AdminDashboard() {
     if (!confirmed) return;
 
     try {
-      await fetch(`http://localhost:5000/api/requests/${id}`, {
+      await fetch(`https://facility-request-system.vercel.app/api/requests/${id}`, {
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`

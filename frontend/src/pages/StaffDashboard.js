@@ -40,7 +40,7 @@ function StaffDashboard() {
 
   const fetchAllRequests = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/requests/my/" + user.username, {
+      const response = await fetch("https://facility-request-system.vercel.app/api/requests/my/" + user.username, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -60,7 +60,7 @@ function StaffDashboard() {
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/requests", {
+      const response = await fetch("https://facility-request-system.vercel.app/api/requests", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -107,7 +107,7 @@ function StaffDashboard() {
     
     try {
       
-      await fetch(`http://localhost:5000/api/requests/${id}`, {
+      await fetch(`https://facility-request-system.vercel.app/api/requests/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
